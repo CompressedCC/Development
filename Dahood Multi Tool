@@ -1,0 +1,38 @@
+local tool_names = { "[LMG]", "[Rifle]" }
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
+
+
+for _, tool_name in ipairs(tool_names) do
+    local tool = backpack:FindFirstChild(tool_name)
+    if tool and tool:IsA("Tool") then
+        tool.Parent = character
+        task.wait(0.2)
+
+        local ammo
+        if game.PlaceId == 2788229376 then
+            ammo = tool:FindFirstChild("Ammo")
+        else
+            local tool_script = tool:FindFirstChild("Script")
+            if tool_script then
+                ammo = tool_script:FindFirstChild("Ammo")
+            end
+        end
+
+        if ammo and ammo:IsA("IntValue") then
+            while ammo.Value > 0 do
+                tool:Activate()
+                task.wait(0.1)
+            end
+        else
+            tool:Activate()
+            task.wait(0.3)
+        end
+    end
+end
+
+print("done")
+local tool = GetLocalPlayerTool()
+game:GetService("ReplicatedStorage").MainEvent:FireServer("Reload", tool)
