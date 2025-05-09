@@ -1,0 +1,22 @@
+local run_service = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+ -- this script will get you banned
+local tool = character:FindFirstChildOfClass("Tool")
+if not tool then
+    warn("No tool equipped.")
+    return
+end
+
+local rotation_speed = 2 
+
+local spinning = true
+local current_angle = 0
+
+run_service.Heartbeat:Connect(function(delta_time)
+    if spinning and tool and tool.Parent == character then
+        current_angle += rotation_speed * delta_time
+        local rotation = CFrame.Angles(0, current_angle, 0)
+        tool.Grip = rotation
+    end
+end)
